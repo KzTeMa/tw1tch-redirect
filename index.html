@@ -1,21 +1,18 @@
+<!-- index.html -->
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Redirect Service</title>
     <script>
-        window.onload = function() {
-            let currentUrl = window.location.href;
-            
-
-            if (currentUrl.includes('tw1tch.tv/')) {
-        
-                let channelName = currentUrl.split('/').pop();
-                
-                let newUrl = 'http://streamscharts.com/channels/' + channelName;
-                
-                window.location.href = newUrl;
-            }
+    function redirectToStreamsCharts() {
+        const path = window.location.pathname;
+        const channelName = path.split('/').filter(Boolean).pop();
+        if (channelName) {
+            window.location.href = `https://streamscharts.com/channels/${channelName}`;
         }
+    }
+    
+    // Execute redirect when page loads
+    window.onload = redirectToStreamsCharts;
     </script>
 </head>
 <body>
