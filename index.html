@@ -1,21 +1,55 @@
-<!-- index.html -->
+<!-- index.html / 404.html -->
 <!DOCTYPE html>
 <html>
 <head>
+    <meta charset="UTF-8">
+    <title>Redirecting...</title>
     <script>
-    function redirectToStreamsCharts() {
-        const path = window.location.pathname;
-        const channelName = path.split('/').filter(Boolean).pop();
-        if (channelName) {
-            window.location.href = `https://streamscharts.com/channels/${channelName}`;
+    function handleRedirect() {
+        try {
+            // Get the full URL and convert to lowercase for consistent matching
+            const currentUrl = window.location.href.toLowerCase();
+            
+            // Match both www and non-www versions
+            const urlPatterns = [
+                /https?:\/\/www\.tw1tch\.tv\/([a-zA-Z0-9_]+)/,
+                /https?:\/\/tw1tch\.tv\/([a-zA-Z0-9_]+)/
+            ];
+            
+            // Try both patterns
+            let channelName = null;
+            for (const pattern of urlPatterns) {
+                const match = currentUrl.match(pattern);
+                if (match && match[1]) {
+                    channelName = match[1];
+                    break;
+                }
+            }
+            
+            // If no match found, try getting channel name directly from pathname
+            if (!channelName) {
+                channelName = window.location.pathname.split('/').filter(Boolean).pop();
+            }
+            
+            // Perform redirect if channel name is found
+            if (channelName) {
+                window.location.href = `https://streamscharts.com/channels/${channelName}`;
+            } else {
+                console.error('Channel name not found');
+                document.body.innerHTML = '<p>Invalid channel format</p>';
+            }
+            
+        } catch (error) {
+            console.error('Redirect error:', error);
+            document.body.innerHTML = '<p>An error occurred during redirect</p>';
         }
     }
     
-    // Execute redirect when page loads
-    window.onload = redirectToStreamsCharts;
+    // Execute redirect immediately
+    handleRedirect();
     </script>
 </head>
 <body>
-    <p>Redirecting...</p>
+    <p>Redirecting to StreamsCharts...</p>
 </body>
 </html>
